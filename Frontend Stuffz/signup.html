@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign up · BookMarked</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Fonts: Fraunces for display, Inter for body/UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="auth-style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <!-- LEFT: brand panel -->
+  <div class="auth-brand col-lg-5 d-none d-lg-flex">
+    <a href="index.html" class="auth-wordmark">🕮 BookMarked<span class="dot">.</span></a>
+
+    <div class="auth-brand-copy">
+      <!-- signature swoosh element, echoes the nav highlight from the app -->
+      <svg class="auth-swoosh" width="140" height="36" viewBox="0 0 140 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 26C20 6 60 2 88 8C110 13 130 20 136 30" stroke="#85a094" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <h1>A home for every draft.</h1>
+      <p>Organize fandom stuffz, original works, and everything in between &mdash; free to start, ready when you are.</p>
+    </div>
+
+    <div class="auth-brand-foot">&copy; <span id="year"></span> 🕮 BookMarked. All rights reserved.</div>
+  </div>
+
+  <!-- RIGHT: form panel -->
+  <div class="auth-form-side">
+    <div class="auth-card">
+
+      <!-- mobile-only wordmark, shown when brand panel is hidden -->
+      <a href="index.html" class="auth-wordmark d-lg-none d-inline-block mb-4" style="color:#2b1d12;">
+        🕮 BookMarked<span class="dot" style="color:#85a094;">.</span>
+      </a>
+
+      <h2>Create your account</h2>
+      <p class="auth-subtitle">Start organizing your work in a few seconds.</p>
+
+      <!-- Reserved for backend-driven alerts (email already taken, server error, etc.)
+           Toggle visibility + text via JS: add class "auth-status-error" or "auth-status-success" -->
+      <div id="signupStatus" class="auth-status" role="alert"></div>
+
+      <!--
+        BACKEND HOOK:
+        - Point action to your registration endpoint, or intercept submit via JS/fetch
+          (recommended) and POST { name, email, password } as JSON.
+        - On failure (e.g. email taken), show #signupStatus with "auth-status-error".
+        - On success, either redirect to onboarding/login or show a "check your email"
+          success state using "auth-status-success".
+      -->
+      <form id="signupForm" action="#" method="POST" novalidate>
+
+        <div class="mb-3">
+          <label for="signupName" class="auth-label">Full name</label>
+          <input
+            type="text"
+            class="auth-input"
+            id="signupName"
+            name="name"
+            placeholder="Jamie Rivera"
+            autocomplete="name"
+            required
+          >
+          <div class="invalid-feedback" id="signupNameError"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="signupEmail" class="auth-label">Email address</label>
+          <input
+            type="email"
+            class="auth-input"
+            id="signupEmail"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          >
+          <div class="invalid-feedback" id="signupEmailError"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="signupPassword" class="auth-label">Password</label>
+          <div class="pw-wrap">
+            <input
+              type="password"
+              class="auth-input"
+              id="signupPassword"
+              name="password"
+              placeholder="Create a password"
+              autocomplete="new-password"
+              required
+              minlength="8"
+            >
+            <button type="button" class="pw-toggle" data-target="signupPassword">Show</button>
+          </div>
+          <div class="form-text-muted mt-1">At least 8 characters.</div>
+          <div class="invalid-feedback" id="signupPasswordError"></div>
+        </div>
+
+        <div class="mb-3">
+          <label for="signupConfirmPassword" class="auth-label">Confirm password</label>
+          <div class="pw-wrap">
+            <input
+              type="password"
+              class="auth-input"
+              id="signupConfirmPassword"
+              name="confirmPassword"
+              placeholder="Re-enter your password"
+              autocomplete="new-password"
+              required
+            >
+            <button type="button" class="pw-toggle" data-target="signupConfirmPassword">Show</button>
+          </div>
+          <div class="invalid-feedback" id="signupConfirmPasswordError"></div>
+        </div>
+
+        <div class="form-check mb-4">
+          <input class="form-check-input" type="checkbox" id="agreeTerms" name="agreeTerms" required>
+          <label class="form-check-label" for="agreeTerms">
+            I agree to the <a href="terms.html" class="auth-link-muted">Terms of Service</a> and <a href="privacy.html" class="auth-link-muted">Privacy Policy</a>
+          </label>
+          <div class="invalid-feedback" id="agreeTermsError"></div>
+        </div>
+
+        <button type="submit" class="btn-auth-primary" id="signupSubmitBtn">
+          Create account
+        </button>
+
+        <div class="auth-divider">or sign up with</div>
+
+        <!-- BACKEND HOOK: wire these to your OAuth provider flows -->
+        <div class="d-flex gap-2">
+          <button type="button" class="btn-auth-secondary" id="googleSignupBtn">Google</button>
+          <button type="button" class="btn-auth-secondary" id="appleSignupBtn">Apple</button>
+        </div>
+      </form>
+
+      <p class="auth-footline">
+        Already have an account? <a href="login.html">Log in</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Show/hide password
+  document.querySelectorAll('.pw-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var input = document.getElementById(btn.dataset.target);
+      var showing = input.type === 'text';
+      input.type = showing ? 'password' : 'text';
+      btn.textContent = showing ? 'Show' : 'Hide';
+    });
+  });
+
+  // Lightweight client-side validation only.
+  // Replace the "BACKEND HOOK" section with a real fetch() call to your registration API.
+  var form = document.getElementById('signupForm');
+  var statusBox = document.getElementById('signupStatus');
+  var submitBtn = document.getElementById('signupSubmitBtn');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    statusBox.className = 'auth-status';
+    statusBox.textContent = '';
+
+    var name = document.getElementById('signupName');
+    var email = document.getElementById('signupEmail');
+    var password = document.getElementById('signupPassword');
+    var confirmPassword = document.getElementById('signupConfirmPassword');
+    var agreeTerms = document.getElementById('agreeTerms');
+
+    var nameError = document.getElementById('signupNameError');
+    var emailError = document.getElementById('signupEmailError');
+    var passwordError = document.getElementById('signupPasswordError');
+    var confirmPasswordError = document.getElementById('signupConfirmPasswordError');
+    var agreeTermsError = document.getElementById('agreeTermsError');
+
+    [name, email, password, confirmPassword].forEach(function (el) { el.classList.remove('is-invalid'); });
+    [nameError, emailError, passwordError, confirmPasswordError, agreeTermsError].forEach(function (el) { el.textContent = ''; });
+
+    var valid = true;
+
+    if (!name.value.trim()) {
+      name.classList.add('is-invalid');
+      nameError.textContent = 'Enter your name.';
+      valid = false;
+    }
+    if (!email.value || !email.checkValidity()) {
+      email.classList.add('is-invalid');
+      emailError.textContent = 'Enter a valid email address.';
+      valid = false;
+    }
+    if (!password.value || password.value.length < 8) {
+      password.classList.add('is-invalid');
+      passwordError.textContent = 'Password must be at least 8 characters.';
+      valid = false;
+    }
+    if (confirmPassword.value !== password.value || !confirmPassword.value) {
+      confirmPassword.classList.add('is-invalid');
+      confirmPasswordError.textContent = 'Passwords do not match.';
+      valid = false;
+    }
+    if (!agreeTerms.checked) {
+      agreeTermsError.textContent = 'You must agree to the terms to continue.';
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // ---------------------------------------------------------------
+    // BACKEND HOOK: replace this block with your real registration request.
+    //
+    // submitBtn.disabled = true;
+    // submitBtn.textContent = 'Creating account…';
+    //
+    // fetch('/api/auth/signup', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     name: name.value,
+    //     email: email.value,
+    //     password: password.value
+    //   })
+    // })
+    //   .then(function (res) { return res.json(); })
+    //   .then(function (data) {
+    //     if (data.success) {
+    //       statusBox.className = 'auth-status auth-status-success';
+    //       statusBox.textContent = 'Account created! Redirecting…';
+    //       window.location.href = '/my-work.html';
+    //     } else {
+    //       statusBox.className = 'auth-status auth-status-error';
+    //       statusBox.textContent = data.message || 'Could not create account.';
+    //     }
+    //   })
+    //   .catch(function () {
+    //     statusBox.className = 'auth-status auth-status-error';
+    //     statusBox.textContent = 'Something went wrong. Please try again.';
+    //   })
+    //   .finally(function () {
+    //     submitBtn.disabled = false;
+    //     submitBtn.textContent = 'Create account';
+    //   });
+    // ---------------------------------------------------------------
+
+    console.log('Form valid — wire this up to your backend.', {
+      name: name.value,
+      email: email.value
+    });
+  });
+
+  document.getElementById('googleSignupBtn').addEventListener('click', function () {
+    // BACKEND HOOK: redirect to /api/auth/google or trigger your OAuth SDK
+    console.log('Google signup clicked — wire up OAuth flow.');
+  });
+  document.getElementById('appleSignupBtn').addEventListener('click', function () {
+    // BACKEND HOOK: redirect to /api/auth/apple or trigger your OAuth SDK
+    console.log('Apple signup clicked — wire up OAuth flow.');
+  });
+</script>
+</body>
+</html>

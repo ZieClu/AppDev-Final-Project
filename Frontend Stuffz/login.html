@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in · BookMarked</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Fonts: Fraunces for display, Inter for body/UI -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="auth-style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <!-- LEFT: brand panel -->
+  <div class="auth-brand col-lg-5 d-none d-lg-flex">
+    <a href="index.html" class="auth-wordmark">🕮 BookMarked<span class="dot">.</span></a>
+
+    <div class="auth-brand-copy">
+      <!-- signature swoosh element, echoes the nav highlight from the app -->
+      <svg class="auth-swoosh" width="140" height="36" viewBox="0 0 140 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 26C20 6 60 2 88 8C110 13 130 20 136 30" stroke="#85a094" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <h1>Welcome back to your worlds.</h1>
+      <p>Pick up right where you left off &mdash; your drafts, folders, and fandoms are exactly as you left them.</p>
+    </div>
+
+    <div class="auth-brand-foot">&copy; <span id="year"></span> 🕮 BookMarked. All rights reserved.</div>
+  </div>
+
+  <!-- RIGHT: form panel -->
+  <div class="auth-form-side">
+    <div class="auth-card">
+
+      <!-- mobile-only wordmark, shown when brand panel is hidden -->
+      <a href="index.html" class="auth-wordmark d-lg-none d-inline-block mb-4" style="color:#2b1d12;">
+        🕮 BookMarked<span class="dot" style="color:#85a094;">.</span>
+      </a>
+
+      <h2>Log in</h2>
+      <p class="auth-subtitle">Enter your details to access your account.</p>
+
+      <!-- Reserved for backend-driven alerts (invalid credentials, locked account, etc.)
+           Toggle visibility + text via JS: add class "auth-status-error" or "auth-status-success" -->
+      <div id="loginStatus" class="auth-status" role="alert"></div>
+
+      <!--
+        BACKEND HOOK:
+        - Point action to your auth endpoint, or intercept submit via JS/fetch (recommended
+          for SPA-style flows) and POST { email, password, remember } as JSON.
+        - On failure, show #loginStatus with class "auth-status-error" and a message.
+        - On success, redirect to the app (e.g. /my-work).
+      -->
+        
+      <form id="loginForm" action="#" method="POST" novalidate>
+
+        <div class="mb-3">
+          <label for="loginEmail" class="auth-label">Email address</label>
+          <input
+            type="email"
+            class="auth-input"
+            id="loginEmail"
+            name="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            required
+          >
+          <div class="invalid-feedback" id="loginEmailError"></div>
+        </div>
+
+        <div class="mb-2">
+          <label for="loginPassword" class="auth-label">Password</label>
+          <div class="pw-wrap">
+            <input
+              type="password"
+              class="auth-input"
+              id="loginPassword"
+              name="password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+              minlength="8"
+            >
+            <button type="button" class="pw-toggle" data-target="loginPassword">Show</button>
+          </div>
+          <div class="invalid-feedback" id="loginPasswordError"></div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rememberMe" name="remember">
+            <label class="form-check-label" for="rememberMe">Remember me</label>
+          </div>
+          <a href="forgot-password.html" class="auth-link-muted">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-auth-primary" id="loginSubmitBtn">
+          Log in
+        </button>
+
+        <div class="auth-divider">or continue with</div>
+
+        <!-- BACKEND HOOK: wire these to your OAuth provider flows -->
+        <div class="d-flex gap-2">
+          <button type="button" class="btn-auth-secondary" id="googleLoginBtn">Google</button>
+          <button type="button" class="btn-auth-secondary" id="appleLoginBtn">Apple</button>
+        </div>
+      </form>
+
+      <p class="auth-footline">
+        Don't have an account? <a href="signup.html">Sign up</a>
+      </p>
+
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Show/hide password
+  document.querySelectorAll('.pw-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var input = document.getElementById(btn.dataset.target);
+      var showing = input.type === 'text';
+      input.type = showing ? 'password' : 'text';
+      btn.textContent = showing ? 'Show' : 'Hide';
+    });
+  });
+
+  // Lightweight client-side validation only.
+  // Replace the "BACKEND HOOK" section with a real fetch() call to your auth API.
+  var form = document.getElementById('loginForm');
+  var statusBox = document.getElementById('loginStatus');
+  var submitBtn = document.getElementById('loginSubmitBtn');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    statusBox.className = 'auth-status';
+    statusBox.textContent = '';
+
+    var email = document.getElementById('loginEmail');
+    var password = document.getElementById('loginPassword');
+    var emailError = document.getElementById('loginEmailError');
+    var passwordError = document.getElementById('loginPasswordError');
+    var valid = true;
+
+    email.classList.remove('is-invalid');
+    password.classList.remove('is-invalid');
+    emailError.textContent = '';
+    passwordError.textContent = '';
+
+    if (!email.value || !email.checkValidity()) {
+      email.classList.add('is-invalid');
+      emailError.textContent = 'Enter a valid email address.';
+      valid = false;
+    }
+    if (!password.value || password.value.length < 8) {
+      password.classList.add('is-invalid');
+      passwordError.textContent = 'Password must be at least 8 characters.';
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    // BACKEND HOOK: replace this block with your real login request.
+    //
+    // submitBtn.disabled = true;
+    // submitBtn.textContent = 'Logging in…';
+    //
+    // fetch('/api/auth/login', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     email: email.value,
+    //     password: password.value,
+    //     remember: document.getElementById('rememberMe').checked
+    //   })
+    // })
+    //   .then(function (res) { return res.json(); })
+    //   .then(function (data) {
+    //     if (data.success) {
+    //       window.location.href = '/my-work.html';
+    //     } else {
+    //       statusBox.className = 'auth-status auth-status-error';
+    //       statusBox.textContent = data.message || 'Invalid email or password.';
+    //     }
+    //   })
+    //   .catch(function () {
+    //     statusBox.className = 'auth-status auth-status-error';
+    //     statusBox.textContent = 'Something went wrong. Please try again.';
+    //   })
+    //   .finally(function () {
+    //     submitBtn.disabled = false;
+    //     submitBtn.textContent = 'Log in';
+    //   });
+
+    console.log('Form valid — wire this up to your backend.', {
+      email: email.value,
+      remember: document.getElementById('rememberMe').checked
+    });
+  });
+
+  document.getElementById('googleLoginBtn').addEventListener('click', function () {
+    // BACKEND HOOK: redirect to /api/auth/google or trigger your OAuth SDK
+    console.log('Google login clicked — wire up OAuth flow.');
+  });
+  document.getElementById('appleLoginBtn').addEventListener('click', function () {
+    // BACKEND HOOK: redirect to /api/auth/apple or trigger your OAuth SDK
+    console.log('Apple login clicked — wire up OAuth flow.');
+  });
+</script>
+</body>
+</html>
