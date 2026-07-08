@@ -195,7 +195,7 @@ a { text-decoration: none; }
   height: 160px;
   right: -30px;
   bottom: -40px;
-  background: radial-gradient(circle, rgba(58, 42, 26, 0.12) 0%, rgba(58, 42, 26, 0) 70%);
+  background: radial-gradient(circle, #3a2a1a1f 0%, #3a2a1a00 70%);
   pointer-events: none;
 }
 
@@ -224,12 +224,6 @@ a { text-decoration: none; }
   color: var(--ink);
   cursor: pointer;
   transition: background 0.15s ease, transform 0.15s ease;
-  opacity: 0;
-  transform: translateY(6px);
-}
-
-.bm-filters-panel.open .bm-genre-check {
-  animation: genreRise 0.32s ease forwards;
 }
 
 .bm-genre-check:hover {
@@ -243,22 +237,6 @@ a { text-decoration: none; }
   accent-color: var(--brown-800);
   cursor: pointer;
 }
-
-@keyframes genreRise {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* stagger the checkbox rows slightly as the panel opens */
-#genreCheckboxList .col-6:nth-child(1) .bm-genre-check { animation-delay: 0.03s; }
-#genreCheckboxList .col-6:nth-child(2) .bm-genre-check { animation-delay: 0.07s; }
-#genreCheckboxList .col-6:nth-child(3) .bm-genre-check { animation-delay: 0.11s; }
-#genreCheckboxList .col-6:nth-child(4) .bm-genre-check { animation-delay: 0.15s; }
-#genreCheckboxList .col-6:nth-child(5) .bm-genre-check { animation-delay: 0.19s; }
-#genreCheckboxList .col-6:nth-child(6) .bm-genre-check { animation-delay: 0.23s; }
-#genreCheckboxList .col-6:nth-child(7) .bm-genre-check { animation-delay: 0.27s; }
-#genreCheckboxList .col-6:nth-child(8) .bm-genre-check { animation-delay: 0.31s; }
-#genreCheckboxList .col-6:nth-child(9) .bm-genre-check { animation-delay: 0.35s; }
-#genreCheckboxList .col-6:nth-child(10) .bm-genre-check { animation-delay: 0.39s; }
 
 
 .bm-filters-panel-foot {
@@ -294,7 +272,7 @@ a { text-decoration: none; }
 .bm-apply-btn:hover {
   background: #4a3722;
   transform: translateY(-2px);
-  box-shadow: 0 10px 18px -8px rgba(43, 29, 18, 0.5);
+  box-shadow: 0 10px 18px -8px #2b1d1280;
 }
 
 .bm-apply-btn:active { transform: translateY(0); }
