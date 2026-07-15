@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Collections · BookMarked</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Fonts: Fraunces for display, Inter for body/UI — same pairing as the rest of the site -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="bookmarked-style.css">
+
+<style>
+  /* ============================================
+     COLLECTIONS PAGE (collections.html)
+     Page-specific styles — reuses the shared
+     variables + components from bookmarked-style.css
+     (.lib-toolbar / .lib-nav for the "Back" bar, etc.)
+     ============================================ */
+
+  .col-header-row {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    padding: 2.5rem 2.5rem 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .col-avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: var(--sage-100);
+    border: 6px solid var(--teal-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--teal-800);
+    flex-shrink: 0;
+    box-shadow: 0 12px 22px -10px #2b1d1266;
+  }
+
+  .col-title {
+    font-family: var(--font-display);
+    font-size: 2.75rem;
+    color: var(--teal-900);
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin: 0;
+  }
+
+  .col-title .spark {
+    color: var(--teal-800);
+    font-size: 1.9rem;
+  }
+
+  .col-content {
+    padding: 2rem 2.5rem 3.5rem;
+    position: relative;
+    z-index: 1;
+    min-height: calc(100vh - 320px);
+  }
+
+  .col-content-head {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+  }
+
+  .col-add-link {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: var(--teal-900);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    background: none;
+    border: none;
+    padding: 0;
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+
+  .col-add-link:hover {
+    color: var(--teal-800);
+    transform: translateY(-1px);
+  }
+
+  .col-add-link .plus {
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .col-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .col-card {
+    background: linear-gradient(160deg, var(--teal-800) 0%, var(--teal-900) 100%);
+    border: none;
+    border-radius: var(--radius-lg);
+    padding: 2.75rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.1rem;
+    box-shadow: 0 14px 28px -12px #2b1d1273;
+    cursor: pointer;
+    width: 100%;
+    transform: translateY(0) scale(1);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+  }
+
+  .col-card:hover,
+  .col-card:focus-visible {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 24px 38px -12px rgba(43, 29, 18, 0.55);
+  }
+
+  .col-card-spark {
+    font-size: 1.9rem;
+    color: var(--cream-100);
+  }
+
+  .col-card-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.6rem;
+    color: var(--cream-100);
+    text-align: center;
+  }
+
+  /* "Add Collection" ghost card, appended at the end of the grid */
+  .col-card--new {
+    background: transparent;
+    border: 2px dashed #f4e8d366;
+    box-shadow: none;
+  }
+  .col-card--new:hover {
+    background: #f4e8d31a;
+    box-shadow: none;
+  }
+  .col-card--new .col-card-spark,
+  .col-card--new .col-card-title {
+    color: var(--sage-100);
+    opacity: 0.85;
+  }
+
+  @media (max-width: 768px) {
+    .col-header-row { padding: 2rem 1.5rem 1.5rem; gap: 1.1rem; }
+    .col-title { font-size: 2rem; }
+    .col-avatar { width: 90px; height: 90px; border-width: 4px; }
+    .col-content { padding: 1.5rem 1.5rem 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="bm-header">
+  <a href="home.html" class="bm-wordmark">🕮 BookMarked<span class="dot">.</span></a>
+</header>
+
+<!-- Avatar + page title -->
+<div class="col-header-row">
+  <div class="col-avatar">
+    <!-- BACKEND HOOK: replace with the user's profile photo, e.g.
+         <img src="{{user.avatarUrl}}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"> -->
+    <svg width="70" height="70" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M4.5 19.5C5.5 16 8.2 14.5 12 14.5C15.8 14.5 18.5 16 19.5 19.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <!-- BACKEND HOOK: replace static "User" text with the logged-in user's display name -->
+  <h1 class="col-title" id="collectionsTitle"><span class="spark">&#10022;</span> User&rsquo;s Collections <span class="spark">&#10022;</span></h1>
+</div>
+
+<!-- Secondary toolbar: reuses the .lib-toolbar / .lib-nav styling from library.html -->
+<div class="lib-toolbar">
+  <nav class="lib-nav">
+    <a href="library.html"><span class="spark">&#10022;</span> Back</a>
+  </nav>
+</div>
+
+<!-- Main content -->
+<main class="col-content">
+  <div class="col-content-head">
+    <button type="button" class="col-add-link" id="addCollectionBtn">Add Collection <span class="plus">+</span></button>
+  </div>
+
+  <div class="col-grid" id="collectionsGrid">
+    <!-- populated by JS from the COLLECTIONS list below -->
+  </div>
+
+  <p class="bm-empty-state d-none" id="collectionsEmptyState">You don&rsquo;t have any collections yet — start one to group your favorite reads.</p>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+/* Placeholder data & demo interactivity.
+   BACKEND HOOK contract:
+     GET  /api/users/{id}/collections
+     POST /api/users/{id}/collections        { name }
+     GET  /api/collections/{id}/books        (used when a card is opened) */
+
+let COLLECTIONS = [
+  { id: 1, name: "Collection 1" },
+  { id: 2, name: "Collection 2" },
+  { id: 3, name: "Collection 3" }
+];
+
+const sparkIcon = '<span class="col-card-spark">&#10022;</span>';
+
+function collectionCardHTML(collection) {
+  return `
+    <button type="button" class="col-card" data-id="${collection.id}">
+      ${sparkIcon}
+      <span class="col-card-title">${collection.name}</span>
+    </button>
+  `;
+}
+
+function newCollectionCardHTML() {
+  return `
+    <button type="button" class="col-card col-card--new" id="newCollectionCard">
+      <span class="col-card-spark">+</span>
+      <span class="col-card-title">New Collection</span>
+    </button>
+  `;
+}
+
+function renderCollections() {
+  const grid = document.getElementById('collectionsGrid');
+  const empty = document.getElementById('collectionsEmptyState');
+
+  if (!COLLECTIONS.length) {
+    empty.classList.remove('d-none');
+  } else {
+    empty.classList.add('d-none');
+  }
+
+  grid.innerHTML = COLLECTIONS.map(collectionCardHTML).join('') + newCollectionCardHTML();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  renderCollections();
+
+  const grid = document.getElementById('collectionsGrid');
+  const addCollectionBtn = document.getElementById('addCollectionBtn');
+
+  function promptNewCollection() {
+    const name = window.prompt('Name your new collection:');
+    if (!name || !name.trim()) return;
+    const newCollection = { id: Date.now(), name: name.trim() };
+    // BACKEND HOOK: POST /api/users/{id}/collections { name: newCollection.name }
+    COLLECTIONS.push(newCollection);
+    renderCollections();
+  }
+
+  addCollectionBtn.addEventListener('click', promptNewCollection);
+
+  grid.addEventListener('click', function (e) {
+    const newCard = e.target.closest('#newCollectionCard');
+    if (newCard) {
+      promptNewCollection();
+      return;
+    }
+    const card = e.target.closest('.col-card[data-id]');
+    if (!card) return;
+    const id = card.getAttribute('data-id');
+    // BACKEND HOOK: navigate to the collection's book list, e.g.
+    // window.location.href = `library.html?collection=${id}`;
+    console.log('Open collection', id, '— wire up collection detail view.');
+  });
+});
+</script>
+</body>
+</html>

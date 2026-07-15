@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="pageTitle">Edit Entry · BookMarked</title>
+
+<!-- Bootstrap 5 (kept for consistency with the rest of the site, not required here) -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Fonts: Fraunces for display, Inter for body/UI — same pairing as the rest of BookMarked -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="bookmarked-style.css">
+<link rel="stylesheet" href="setupsale-style.css">
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="ss-header">
+  <!-- BACKEND HOOK: point this back to wherever the seller came from
+       (My Listings, or the book's own info page if editing) -->
+  <a href="listings.html" class="ss-back" id="backLink">Back</a>
+</header>
+
+<!-- MAIN -->
+<main class="ss-main">
+
+  <!-- Cover uploader -->
+  <div class="ss-cover-panel">
+    <label class="ss-cover-box" id="coverBox" for="coverInput">
+      <span class="ss-plus">&#43;</span>
+      <img id="coverPreview" src="" alt="" hidden>
+    </label>
+    <!-- BACKEND HOOK: on submit, upload this file (or the existing cover
+         URL if unchanged) alongside the rest of the form data -->
+    <input type="file" id="coverInput" accept="image/*" hidden>
+    <label for="coverInput" class="ss-add-cover-link">Add Book Cover</label>
+  </div>
+
+  <!-- Entry form -->
+  <div class="ss-form-panel">
+    <h2 class="ss-heading" id="formHeading"><span class="spark">&#10022;</span> Edit Entry</h2>
+    <hr class="ss-divider">
+
+    <form id="entryForm">
+      <div class="ss-field">
+        <label for="titleInput">Title:</label>
+        <input type="text" id="titleInput" name="title" autocomplete="off" required>
+      </div>
+
+      <div class="ss-field">
+        <label for="authorInput">Author:</label>
+        <input type="text" id="authorInput" name="author" autocomplete="off" required>
+      </div>
+
+      <div class="ss-field ss-field-synopsis">
+        <label for="synopsisInput">Synopsis:</label>
+        <textarea id="synopsisInput" name="synopsis" rows="5" placeholder="What's this book about?"></textarea>
+      </div>
+
+      <div class="ss-field ss-genre-field">
+        <label>Genre:</label>
+        <div class="ss-genre-grid" id="genreGrid">
+          <!-- populated by JS from the GENRES list below -->
+        </div>
+      </div>
+
+      <div class="ss-field-row">
+        <div class="ss-price-field">
+          <label for="priceInput">Price:</label>
+          <input type="number" id="priceInput" name="price" min="0" step="1" placeholder="0" required>
+        </div>
+
+        <!-- Only shown when editing an existing listing -->
+        <span class="ss-delete-link d-none" id="deleteLink">Delete this listing</span>
+
+        <button type="submit" class="ss-apply-btn">Apply</button>
+      </div>
+    </form>
+  </div>
+
+</main>
+
+<script>
+/* Same genre set used on the home page, ordered to match the 3-row /
+   4-column layout in the design. */
+const GENRES = [
+  "Fantasy", "Romance", "Historical",
+  "Horror", "Philosophical", "Mystery",
+  "Action", "Adventure", "Non-fiction",
+  "Dystopian"
+];
+
+function buildGenreCheckboxes() {
+  const wrap = document.getElementById('genreGrid');
+  wrap.innerHTML = GENRES.map((g, i) => `
+    <label class="ss-genre-check">
+      <input type="checkbox" value="${g}" class="entry-genre-checkbox" id="genre-${i}">
+      ${g}
+    </label>
+  `).join('');
+}
+
+/*
+  BACKEND HOOK: this page doubles as "add new listing" and "edit existing
+  listing" depending on how it's linked to, e.g.
+    setupsale.html                -> add mode
+    setupsale.html?bookId=123     -> edit mode, pre-fill the form below
+
+  Swap this stand-in for a real fetch, e.g.
+    fetch(`/api/books/${bookId}`).then(r => r.json()).then(populateForm)
+*/
+function getEditingBookId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('bookId');
+}
+
+function populateForm(book) {
+  document.getElementById('titleInput').value = book.title || '';
+  document.getElementById('authorInput').value = book.author || '';
+  document.getElementById('synopsisInput').value = book.synopsis || '';
+  document.getElementById('priceInput').value = book.price ?? '';
+  (book.genres || []).forEach(g => {
+    const cb = document.querySelector(`.entry-genre-checkbox[value="${g}"]`);
+    if (cb) cb.checked = true;
+  });
+  if (book.coverUrl) {
+    const preview = document.getElementById('coverPreview');
+    preview.src = book.coverUrl;
+    preview.hidden = false;
+    document.getElementById('coverBox').classList.add('has-image');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  buildGenreCheckboxes();
+
+  const bookId = getEditingBookId();
+  const heading = document.getElementById('formHeading');
+  const pageTitle = document.getElementById('pageTitle');
+  const deleteLink = document.getElementById('deleteLink');
+
+  if (bookId) {
+    // Edit mode
+    heading.innerHTML = '<span class="spark">&#10022;</span> Edit Entry';
+    pageTitle.textContent = 'Edit Entry · BookMarked';
+    deleteLink.classList.remove('d-none');
+
+    // BACKEND HOOK: replace with a real fetch for the existing listing
+    // fetch(`/api/books/${bookId}`).then(r => r.json()).then(populateForm);
+  } else {
+    // Add mode
+    heading.innerHTML = '<span class="spark">&#10022;</span> New Listing';
+    pageTitle.textContent = 'New Listing · BookMarked';
+  }
+
+  // Cover image preview
+  const coverInput = document.getElementById('coverInput');
+  const coverBox = document.getElementById('coverBox');
+  const coverPreview = document.getElementById('coverPreview');
+
+  coverInput.addEventListener('change', function () {
+    const file = coverInput.files && coverInput.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    coverPreview.src = url;
+    coverPreview.hidden = false;
+    coverBox.classList.add('has-image');
+  });
+
+  // Form submit
+  document.getElementById('entryForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const selectedGenres = Array.from(document.querySelectorAll('.entry-genre-checkbox:checked')).map(cb => cb.value);
+
+    const payload = {
+      title: document.getElementById('titleInput').value.trim(),
+      author: document.getElementById('authorInput').value.trim(),
+      synopsis: document.getElementById('synopsisInput').value.trim(),
+      price: Number(document.getElementById('priceInput').value),
+      genres: selectedGenres,
+      coverFile: coverInput.files[0] || null
+    };
+
+    // BACKEND HOOK:
+    //   Add mode:  POST   /api/books           { ...payload }
+    //   Edit mode: PATCH  /api/books/{bookId}   { ...payload }
+    // Use FormData instead of JSON if coverFile needs to travel in the same request.
+    console.log(bookId ? `Update book ${bookId}` : 'Create new book', payload);
+
+    // BACKEND HOOK: on success, redirect back to My Listings
+    // window.location.href = 'listings.html';
+  });
+
+  // Delete listing (edit mode only)
+  deleteLink.addEventListener('click', function () {
+    // BACKEND HOOK: confirm, then DELETE /api/books/{bookId}
+    console.log(`Delete book ${bookId} — wire up confirmation + API call.`);
+  });
+});
+</script>
+</body>
+</html>
