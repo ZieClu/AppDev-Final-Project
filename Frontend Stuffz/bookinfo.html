@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book Info · BookMarked</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Fonts: Fraunces for display, Inter for body/UI — same pairing as the rest of the site -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="bookmarked-style.css">
+</head>
+<body>
+
+<!-- HEADER (identical to home.html — clicking the wordmark returns to the listings) -->
+<header class="bm-header">
+  <a href="home.html" class="bm-wordmark" id="homeLogoLink">🕮 BookMarked<span class="dot">.</span></a>
+</header>
+
+<!-- TOOLBAR (identical to home.html so the search/filters stay reachable from a book page) -->
+<div class="bm-toolbar">
+  <button class="bm-filters-toggle" id="filtersToggleBtn" aria-expanded="false" aria-controls="filtersPanel">
+    <span class="caret">&#9660;</span> Filters
+  </button>
+
+  <form id="searchForm" class="d-flex flex-grow-1 gap-3" role="search" action="home.html" method="get">
+    <input
+      type="search"
+      class="bm-search-input"
+      id="searchInput"
+      name="q"
+      placeholder="Search by title, author, or username&hellip;"
+      aria-label="Search books"
+    >
+    <button type="submit" class="bm-search-btn">Search</button>
+  </form>
+
+  <!-- Genres dropdown (kept for visual/UX parity with home.html; applying here just redirects to filtered results) -->
+  <div class="bm-filters-panel" id="filtersPanel">
+    <h3>Genres</h3>
+    <hr>
+    <div class="row" id="genreCheckboxList"></div>
+    <div class="bm-filters-panel-foot">
+      <button type="button" class="bm-collapse-btn" id="collapseFiltersBtn" aria-label="Collapse filters">&#9650;</button>
+      <button type="button" class="bm-apply-btn" id="applyFiltersBtn">Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOOK INFO LAYOUT -->
+<div class="bi-layout">
+
+  <!-- Left: cover + purchase actions -->
+  <aside class="bi-cover-panel">
+    <div class="bi-cover-frame" id="coverFrame">
+      <!-- BACKEND HOOK: swap this gradient block for the real cover image, e.g.
+           <img src="{{book.coverUrl}}" alt="{{book.title}} cover">
+           and remove the title/author overlay spans below if the art already includes them. -->
+      <span class="bi-cover-title" id="bookCoverTitle">Loading&hellip;</span>
+      <span class="bi-cover-author" id="bookCoverAuthor"></span>
+    </div>
+
+    <div class="bi-price" id="bookPrice">Php &mdash;</div>
+
+    <div class="bi-action-row">
+      <!-- BACKEND HOOK: POST /api/orders with { bookId } -->
+      <button type="button" class="bi-buy-btn" id="buyNowBtn">Buy Now</button>
+      <!-- BACKEND HOOK: POST /api/wishlist with { bookId } -->
+      <button type="button" class="bi-wishlist-btn" id="wishlistBtn">Add to Wishlist</button>
+    </div>
+  </aside>
+
+  <!-- Right: details -->
+  <main class="bi-content-panel">
+    <h1 class="bi-title" id="bookTitle">&nbsp;</h1>
+    <p class="bi-author" id="bookAuthor"></p>
+    <hr class="bi-divider">
+
+    <h2 class="bi-synopsis-heading">Synopsis:</h2>
+    <p class="bi-synopsis-text" id="bookSynopsis"></p>
+
+    <div class="bi-genres-pill">
+      <span class="label">Genres:</span>
+      <span id="bookGenres"></span>
+    </div>
+
+    <div class="bi-review-block">
+      <div class="bi-stars" id="starRating" role="radiogroup" aria-label="Rate this book">
+        <span class="bi-star" data-value="1" role="radio" aria-label="1 star"></span>
+        <span class="bi-star" data-value="2" role="radio" aria-label="2 stars"></span>
+        <span class="bi-star" data-value="3" role="radio" aria-label="3 stars"></span>
+        <span class="bi-star" data-value="4" role="radio" aria-label="4 stars"></span>
+        <span class="bi-star" data-value="5" role="radio" aria-label="5 stars"></span>
+      </div>
+
+      <div class="bi-reviewer-avatar">
+        <!-- BACKEND HOOK: replace with the logged-in user's profile photo -->
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M4.5 19.5C5.5 16 8.2 14.5 12 14.5C15.8 14.5 18.5 16 19.5 19.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <input type="text" class="bi-review-input" id="reviewInput" placeholder="Write a review">
+
+      <!-- BACKEND HOOK: POST /api/books/{id}/reviews with { rating, text } -->
+      <button type="button" class="bi-send-btn" id="submitReviewBtn" aria-label="Submit review">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 11.5L20.5 3.5L13.5 21L10.8 13.7L3 11.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+          <path d="M10.8 13.7L16.5 7.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+/* Placeholder data & demo interactivity — same shape as home.html's BOOKS list,
+   plus a "synopsis" field. Swap this whole block for a real fetch, e.g.
+   GET /api/books/{id}  ->  { id, title, author, price, genres, cover, synopsis } */
+
+const GENRES = [
+  "Fantasy", "Mystery", "Romance", "Adventure",
+  "Historical", "Action", "Horror", "Non-fiction",
+  "Philosophical", "Dystopian"
+];
+
+const BOOKS = [
+  { id: 1,  title: "House of Leaves",              author: "Mark Z. Danielewski", price: 250, genres: ["Horror", "Philosophical"], cover: "cover-1",
+    synopsis: "A found-footage novel within a novel: a family's account of a house that is somehow larger inside than out, unravelling the person who discovers their manuscript." },
+  { id: 2,  title: "Madonna in a Fur Coat",         author: "Sabahattin Ali",      price: 300, genres: ["Romance", "Historical"], cover: "cover-2",
+    synopsis: "A quiet Turkish clerk uncovers the diary of a coworker and reads of a consuming, unrequited love affair in 1920s Berlin." },
+  { id: 3,  title: "The Great Gatsby",              author: "F. Scott Fitzgerald", price: 150, genres: ["Historical", "Romance"], cover: "cover-3",
+    synopsis: "Jay Gatsby's glittering Long Island parties mask an obsessive longing for the past and for a love he cannot quite reach again." },
+  { id: 4,  title: "East of Eden",                  author: "John Steinbeck",     price: 250, genres: ["Historical", "Philosophical"], cover: "cover-4",
+    synopsis: "Two families in California's Salinas Valley echo the story of Cain and Abel across generations of love, rivalry, and choice." },
+  { id: 5,  title: "Percy Jackson: The Lightning Thief", author: "Rick Riordan",  price: 400, genres: ["Fantasy", "Adventure"], cover: "cover-5",
+    synopsis: "A boy discovers he is the son of Poseidon and is thrust into a quest across a modern America hiding the gods of Olympus." },
+  { id: 6,  title: "The Island of Missing Trees",   author: "Elif Shafak",        price: 199, genres: ["Historical", "Romance"], cover: "cover-6",
+    synopsis: "A fig tree smuggled out of divided Cyprus roots a story of a family, an island's wounds, and a love that survived them." },
+  { id: 7,  title: "Pet Sematary",                  author: "Stephen King",       price: 600, genres: ["Horror"], cover: "cover-7",
+    synopsis: "A family moves next to a burial ground with the power to bring back the dead — changed, and not for the better." },
+  { id: 8,  title: "The Unbearable Lightness of Being", author: "Milan Kundera",  price: 200, genres: ["Philosophical", "Romance"], cover: "cover-8",
+    synopsis: "Two couples in Prague navigate love, fidelity, and the weightless absurdity of lives lived only once." },
+  { id: 9,  title: "Frankenstein",                  author: "Mary Wollstonecraft Shelley", price: 270, genres: ["Horror", "Fantasy"], cover: "cover-9",
+    synopsis: "A scientist's creation, brought to life and then abandoned, seeks the belonging his maker refused to give him." },
+  { id: 10, title: "The Haunting of Hill House",    author: "Shirley Jackson",    price: 300, genres: ["Horror", "Mystery"], cover: "cover-10",
+    synopsis: "Four strangers stay in a notoriously unwelcoming house to study the supernatural, and the house begins to choose among them." },
+  { id: 11, title: "The Call of Cthulhu",           author: "H. P. Lovecraft",    price: 400, genres: ["Horror", "Fantasy"], cover: "cover-11",
+    synopsis: "Scattered clues — a sculptor's nightmares, a sailor's testimony — point to a slumbering cosmic horror beneath the sea." },
+  { id: 12, title: "Dracula",                       author: "Bram Stoker",        price: 350, genres: ["Horror", "Fantasy"], cover: "cover-12",
+    synopsis: "A solicitor's visit to a remote Transylvanian castle unleashes a centuries-old count on the streets of Victorian London." },
+  { id: 13, title: "IT",                            author: "Stephen King",       price: 450, genres: ["Horror"], cover: "cover-13",
+    synopsis: "A group of childhood friends confront a shape-shifting evil haunting their town, then must return decades later to finish it." },
+  { id: 14, title: "Scary Stories to Tell in the Dark", author: "Alvin Schwartz", price: 220, genres: ["Horror"], cover: "cover-14",
+    synopsis: "A collection of folk horror and campfire tales, illustrated in a style as unsettling as the stories themselves." },
+  { id: 15, title: "The Little Prince",             author: "Antoine de Saint-Exup\u00e9ry, illus. Chris Riddell", price: 300, genres: ["Fantasy", "Philosophical"], cover: "cover-15",
+    synopsis: "A pilot forced to land in the Sahara meets a little prince. The wise and enchanting stories the prince tells of his own planet with its three volcanoes and a haughty flower are unforgettable. A strange and wonderful parable for all ages, with super illustrations by the author." },
+  { id: 16, title: "The Little Prince",             author: "Antoine de Saint-Exup\u00e9ry", price: 350, genres: ["Fantasy", "Philosophical"], cover: "cover-16",
+    synopsis: "A pilot forced to land in the Sahara meets a little prince. The wise and enchanting stories the prince tells of his own planet with its three volcanoes and a haughty flower are unforgettable. A strange and wonderful parable for all ages, with super illustrations by the author." }
+];
+
+function getBookIdFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const id = parseInt(params.get('id'), 10);
+  return Number.isFinite(id) ? id : null;
+}
+
+function renderBook(book) {
+  document.title = `${book.title} · BookMarked`;
+
+  document.getElementById('bookCoverTitle').textContent = book.title;
+  document.getElementById('bookCoverAuthor').textContent = book.author;
+  document.getElementById('coverFrame').classList.add(book.cover);
+
+  document.getElementById('bookPrice').textContent = `Php ${book.price.toFixed(2)}`;
+  document.getElementById('bookTitle').textContent = book.title;
+
+  const authorEl = document.getElementById('bookAuthor');
+  authorEl.innerHTML = `Author: <span>${book.author}</span>`;
+
+  document.getElementById('bookSynopsis').textContent = book.synopsis;
+
+  document.getElementById('bookGenres').innerHTML = book.genres
+    .map(g => `<span class="bi-genre-tag">${g}</span>`)
+    .join('&nbsp;&nbsp;');
+
+  document.getElementById('buyNowBtn').dataset.bookId = book.id;
+  document.getElementById('wishlistBtn').dataset.bookId = book.id;
+  document.getElementById('submitReviewBtn').dataset.bookId = book.id;
+}
+
+function buildGenreCheckboxes() {
+  const wrap = document.getElementById('genreCheckboxList');
+  wrap.innerHTML = GENRES.map(g => `
+    <div class="col-6">
+      <label class="bm-genre-check">
+        <input type="checkbox" value="${g}" class="genre-checkbox">
+        ${g}
+      </label>
+    </div>
+  `).join('');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  buildGenreCheckboxes();
+
+  // BACKEND HOOK: replace this lookup with fetch(`/api/books/${id}`).then(...)
+  const requestedId = getBookIdFromUrl();
+  const book = BOOKS.find(b => b.id === requestedId) || BOOKS.find(b => b.id === 15);
+  renderBook(book);
+
+  const filtersToggleBtn = document.getElementById('filtersToggleBtn');
+  const filtersPanel = document.getElementById('filtersPanel');
+  const collapseFiltersBtn = document.getElementById('collapseFiltersBtn');
+  const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+
+  function toggleFiltersPanel(forceOpen) {
+    const willOpen = forceOpen !== undefined ? forceOpen : !filtersPanel.classList.contains('open');
+    filtersPanel.classList.toggle('open', willOpen);
+    filtersToggleBtn.setAttribute('aria-expanded', String(willOpen));
+  }
+
+  filtersToggleBtn.addEventListener('click', () => toggleFiltersPanel());
+  collapseFiltersBtn.addEventListener('click', () => toggleFiltersPanel(false));
+
+  applyFiltersBtn.addEventListener('click', function () {
+    // Filtering lives on the home page — jump there with the selected genres.
+    const selected = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(cb => cb.value);
+    window.location.href = `home.html${selected.length ? '?genres=' + encodeURIComponent(selected.join(',')) : ''}`;
+  });
+
+  // Star rating: click to select, keep it filled up to the chosen value
+  const stars = Array.from(document.querySelectorAll('#starRating .bi-star'));
+  let selectedRating = 0;
+
+  function paintStars(value) {
+    stars.forEach(s => s.classList.toggle('is-filled', parseInt(s.dataset.value, 10) <= value));
+  }
+
+  stars.forEach(star => {
+    star.addEventListener('mouseenter', () => paintStars(parseInt(star.dataset.value, 10)));
+    star.addEventListener('click', () => {
+      selectedRating = parseInt(star.dataset.value, 10);
+      paintStars(selectedRating);
+    });
+  });
+  document.getElementById('starRating').addEventListener('mouseleave', () => paintStars(selectedRating));
+
+  // Buy / Wishlist: intentionally inert placeholders for now
+  document.getElementById('buyNowBtn').addEventListener('click', function () {
+    // BACKEND HOOK: POST /api/orders with { bookId: this.dataset.bookId }
+    console.log('Buy Now clicked for book id', this.dataset.bookId, '— wire up checkout flow.');
+  });
+
+  document.getElementById('wishlistBtn').addEventListener('click', function () {
+    // BACKEND HOOK: POST /api/wishlist with { bookId: this.dataset.bookId }
+    console.log('Add to Wishlist clicked for book id', this.dataset.bookId, '— wire up wishlist flow.');
+  });
+
+  document.getElementById('submitReviewBtn').addEventListener('click', function () {
+    const text = document.getElementById('reviewInput').value.trim();
+    // BACKEND HOOK: POST /api/books/{id}/reviews with { rating: selectedRating, text }
+    console.log('Submit review for book id', this.dataset.bookId, { rating: selectedRating, text }, '— wire up reviews flow.');
+  });
+});
+</script>
+</body>
+</html>

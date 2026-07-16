@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account · BookMarked</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Fonts: Fraunces for display, Inter for body/UI — same pairing as login/signup/home -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="bookmarked-style.css">
+<link rel="stylesheet" href="profile-style.css">
+</head>
+<body>
+
+<!-- HEADER (shared with home.html) -->
+<header class="bm-header">
+  <a href="home.html" class="bm-wordmark" id="homeLogoLink">🕮 BookMarked<span class="dot">.</span></a>
+</header>
+
+<!-- LAYOUT -->
+<div class="pf-layout">
+
+  <!-- Left panel: profile identity + nav -->
+  <aside class="pf-profile-panel">
+
+    <div class="pf-avatar">
+      <!-- BACKEND HOOK: replace with the user's profile photo, e.g.
+           <img src="{{user.avatarUrl}}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"> -->
+      <svg width="70" height="70" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M4.5 19.5C5.5 16 8.2 14.5 12 14.5C15.8 14.5 18.5 16 19.5 19.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- BACKEND HOOK: replace static text with the logged-in user's display name -->
+    <div class="pf-username" id="profileUsername">MyUsername1234</div>
+
+    <div class="pf-edit-username">
+      <span class="icon">&#9998;</span>
+      <a href="#" id="editUsernameLink">Edit username</a>
+    </div>
+
+    <div class="pf-change-pic">
+      <a href="#" id="changePicLink">Change Profile Picture</a>
+    </div>
+
+    <hr class="pf-divider">
+
+    <nav class="pf-nav">
+      <a href="library.html"><span class="spark">&#10022;</span> My Library</a>
+      <a href="transactions.html"><span class="spark">&#10022;</span> Transaction History</a>
+      <a href="listings.html"><span class="spark">&#10022;</span> My Store</a>
+      <a href="purchases.html"><span class="spark">&#10022;</span> Purchase History</a>
+    </nav>
+
+    <hr class="pf-divider">
+
+    <div class="pf-footer-links">
+      <a href="home.html">Back to Store</a>
+      <a href="#" id="logoutLink">Logout?</a>
+    </div>
+
+  </aside>
+
+  <!-- Right panel: account information form -->
+  <main class="pf-info-panel">
+    <h2 class="pf-info-heading"><span class="spark">&#10022;</span> Account Information</h2>
+
+    <form id="accountInfoForm">
+      <div class="pf-field">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" name="firstName" value="Juan">
+      </div>
+
+      <div class="pf-field">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastName" value="Dela Cruz">
+      </div>
+
+      <div class="pf-field">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" value="jdc@gmail.com">
+      </div>
+
+      <div class="pf-field pf-field-birthdate">
+        <label for="birthdate">Birthdate</label>
+        <input type="text" id="birthdate" name="birthdate" value="09/27/1999" placeholder="MM/DD/YYYY">
+        <span class="cal-icon">&#128197;</span>
+      </div>
+
+      <div class="pf-field pf-field-password">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" value="***********" readonly>
+        <a href="#" class="pf-change-password" id="changePasswordLink">Change Password?</a>
+      </div>
+    </form>
+  </main>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+/* Placeholder interactivity — swap the console.log calls / BACKEND HOOK
+   comments for real API calls, e.g.:
+     GET  /api/account            -> populate the form on load
+     PATCH /api/account           -> save edited fields
+     POST /api/account/avatar     -> upload a new profile picture
+     POST /api/auth/logout        -> end the session
+*/
+
+document.addEventListener('DOMContentLoaded', function () {
+  const editUsernameLink = document.getElementById('editUsernameLink');
+  const changePicLink = document.getElementById('changePicLink');
+  const changePasswordLink = document.getElementById('changePasswordLink');
+  const logoutLink = document.getElementById('logoutLink');
+  const accountInfoForm = document.getElementById('accountInfoForm');
+
+  editUsernameLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    // BACKEND HOOK: open an edit-username modal / inline input, then
+    // PATCH /api/account { username }
+    console.log('Edit username clicked — wire up username editing.');
+  });
+
+  changePicLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    // BACKEND HOOK: open a file picker and POST /api/account/avatar
+    console.log('Change profile picture clicked — wire up avatar upload.');
+  });
+
+  changePasswordLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    // BACKEND HOOK: open a change-password modal / navigate to a
+    // dedicated flow, then POST /api/account/password
+    console.log('Change password clicked — wire up password change flow.');
+  });
+
+  logoutLink.addEventListener('click', function (e) {
+    e.preventDefault();
+    // BACKEND HOOK: POST /api/auth/logout, then redirect to login.html
+    console.log('Logout clicked — wire up session teardown + redirect.');
+  });
+
+  accountInfoForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    // BACKEND HOOK: PATCH /api/account with the changed fields
+    console.log('Account info submitted — wire up save.');
+  });
+});
+</script>
+</body>
+</html>

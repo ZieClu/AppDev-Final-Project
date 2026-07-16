@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Library · BookMarked</title>
+
+<!-- Bootstrap 5 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Fonts: Fraunces for display, Inter for body/UI — same pairing as the rest of the app -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="bookmarked-style.css">
+</head>
+<body class="lib-scroll">
+
+<!-- HEADER -->
+<header class="bm-header">
+  <a href="home.html" class="bm-wordmark" id="homeLogoLink">🕮 BookMarked<span class="dot">.</span></a>
+</header>
+
+<!-- SECONDARY NAV TOOLBAR -->
+<div class="lib-toolbar">
+  <nav class="lib-nav" aria-label="Library navigation">
+    <a href="home.html"><span class="spark">&#10022;</span> Back</a>
+    <a href="collections.html"><span class="spark">&#10022;</span> Collections</a>
+    <a href="wishlist.html"><span class="spark">&#10022;</span> Wishlist</a>
+    <a href="purchases.html"><span class="spark">&#10022;</span> Purchase History</a>
+  </nav>
+
+  <button class="lib-sort-toggle" id="sortToggleBtn" aria-expanded="false" aria-controls="sortPanel">
+    <span class="caret">&#9660;</span> Sort by
+  </button>
+
+  <!-- Genres filter panel, reused from the home page filter styling -->
+  <div class="bm-filters-panel lib-filters-panel" id="sortPanel">
+    <h3>Genres</h3>
+    <hr>
+    <div class="row" id="genreCheckboxList">
+      <!-- populated by JS from the GENRES list below -->
+    </div>
+    <div class="bm-filters-panel-foot">
+      <button type="button" class="bm-collapse-btn" id="collapseSortBtn" aria-label="Collapse sort options">&#9650;</button>
+      <button type="button" class="bm-apply-btn" id="applySortBtn">Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIBRARY HEADING -->
+<div class="lib-header-row">
+  <div class="lib-avatar">
+    <!-- BACKEND HOOK: replace with the user's profile photo, e.g.
+         <img src="{{user.avatarUrl}}" alt="" style="width:100%;height:100%;border-radius:50%;object-fit:cover;"> -->
+    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="8" r="3.5" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M4.5 19.5C5.5 16 8.2 14.5 12 14.5C15.8 14.5 18.5 16 19.5 19.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <!-- BACKEND HOOK: replace static "User" text with the logged-in user's display name -->
+  <h1 class="lib-title" id="libraryTitle"><span id="libraryUsername">User</span>&rsquo;s Library <span class="spark">&#10022;</span></h1>
+</div>
+
+<!-- LIBRARY CONTENT -->
+<main class="lib-content">
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="libraryGrid">
+    <!-- populated by JS from MY_LIBRARY_IDS below -->
+  </div>
+
+  <p class="lib-empty-state d-none" id="libraryEmptyState">No books in your library match that genre yet.</p>
+
+  <!--
+    BACKEND HOOK: this divider is a placeholder for pagination / "load more".
+    Wire its click handler to fetch the next page from your API and append
+    results to #libraryGrid, or replace it with real Bootstrap pagination.
+  -->
+  <button type="button" class="bm-divider" id="loadMoreBtn" aria-label="Load more library items"></button>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script>
+/* Placeholder data & demo interactivity — same shape as home.html so a
+   backend dev can wire both pages to the same /api/books contract:
+     GET /api/library?userId={{user.id}}
+     GET /api/library?userId={{user.id}}&genres=horror,fantasy */
+
+const GENRES = [
+  "Fantasy", "Mystery", "Romance", "Adventure",
+  "Historical", "Action", "Horror", "Non-fiction",
+  "Philosophical", "Dystopian"
+];
+
+const BOOKS = [
+  { id: 1,  title: "House of Leaves",              author: "Mark Z. Danielewski", genres: ["Horror", "Philosophical"], cover: "cover-1" },
+  { id: 2,  title: "Madonna in a Fur Coat",         author: "Sabahattin Ali",      genres: ["Romance", "Historical"],   cover: "cover-2" },
+  { id: 3,  title: "The Great Gatsby",              author: "F. Scott Fitzgerald", genres: ["Historical", "Romance"],   cover: "cover-3" },
+  { id: 4,  title: "East of Eden",                  author: "John Steinbeck",     genres: ["Historical", "Philosophical"], cover: "cover-4" },
+  { id: 5,  title: "Percy Jackson: The Lightning Thief", author: "Rick Riordan",  genres: ["Fantasy", "Adventure"],    cover: "cover-5" },
+  { id: 6,  title: "The Island of Missing Trees",   author: "Elif Shafak",        genres: ["Historical", "Romance"],   cover: "cover-6" },
+  { id: 7,  title: "Pet Sematary",                  author: "Stephen King",       genres: ["Horror"],                  cover: "cover-7" },
+  { id: 8,  title: "The Unbearable Lightness of Being", author: "Milan Kundera",  genres: ["Philosophical", "Romance"], cover: "cover-8" },
+  { id: 9,  title: "Frankenstein",                  author: "Mary Wollstonecraft Shelley", genres: ["Horror", "Fantasy"], cover: "cover-9" },
+  { id: 10, title: "The Haunting of Hill House",    author: "Shirley Jackson",    genres: ["Horror", "Mystery"],       cover: "cover-10" },
+  { id: 11, title: "The Call of Cthulhu",           author: "H. P. Lovecraft",    genres: ["Horror", "Fantasy"],       cover: "cover-11" },
+  { id: 12, title: "Dracula",                       author: "Bram Stoker",        genres: ["Horror", "Fantasy"],       cover: "cover-12" },
+  { id: 13, title: "IT",                            author: "Stephen King",       genres: ["Horror"],                  cover: "cover-13" },
+  { id: 14, title: "Scary Stories to Tell in the Dark", author: "Alvin Schwartz", genres: ["Horror"],                  cover: "cover-14" },
+  { id: 15, title: "The Little Prince",             author: "Antoine de Saint-Exup\u00e9ry, illus. Chris Riddell", genres: ["Fantasy", "Philosophical"], cover: "cover-15" },
+  { id: 16, title: "The Little Prince",             author: "Antoine de Saint-Exup\u00e9ry", genres: ["Fantasy", "Philosophical"], cover: "cover-16" }
+];
+
+// BACKEND HOOK: swap this static id list for the current user's actual
+// owned-book ids returned by GET /api/library?userId={{user.id}}
+const MY_LIBRARY_IDS = [13, 14, 11, 12];
+
+/* render helpers */
+
+function libraryCardHTML(book) {
+  // BACKEND HOOK: swap the .lib-cover placeholder for a real cover image, e.g.
+  // <img src="${book.coverUrl}" alt="${book.title} cover" class="lib-cover-img">
+  return `
+    <div class="col">
+      <a href="bookinfo.html?id=${book.id}" class="text-decoration-none">
+        <div class="lib-book-card" data-id="${book.id}">
+          <div class="lib-cover ${book.cover}"></div>
+          <div class="lib-book-title">${book.title}</div>
+          <div class="lib-book-author">${book.author}</div>
+        </div>
+      </a>
+    </div>
+  `;
+}
+
+function renderLibrary(list) {
+  const grid = document.getElementById('libraryGrid');
+  const empty = document.getElementById('libraryEmptyState');
+  if (!list.length) {
+    grid.innerHTML = '';
+    empty.classList.remove('d-none');
+    return;
+  }
+  empty.classList.add('d-none');
+  grid.innerHTML = list.map(libraryCardHTML).join('');
+}
+
+function showLibrary(selectedGenres) {
+  const owned = MY_LIBRARY_IDS.map(id => BOOKS.find(b => b.id === id)).filter(Boolean);
+  const results = selectedGenres && selectedGenres.length
+    ? owned.filter(b => b.genres.some(g => selectedGenres.includes(g)))
+    : owned;
+  renderLibrary(results);
+}
+
+/* genre checkboxes (reused pattern from home.html) */
+
+function buildGenreCheckboxes() {
+  const wrap = document.getElementById('genreCheckboxList');
+  wrap.innerHTML = GENRES.map(g => `
+    <div class="col-6">
+      <label class="bm-genre-check">
+        <input type="checkbox" value="${g}" class="genre-checkbox">
+        ${g}
+      </label>
+    </div>
+  `).join('');
+}
+
+/* wire up interactions */
+
+document.addEventListener('DOMContentLoaded', function () {
+  buildGenreCheckboxes();
+  showLibrary();
+
+  const sortToggleBtn = document.getElementById('sortToggleBtn');
+  const sortPanel = document.getElementById('sortPanel');
+  const collapseSortBtn = document.getElementById('collapseSortBtn');
+  const applySortBtn = document.getElementById('applySortBtn');
+
+  function toggleSortPanel(forceOpen) {
+    const willOpen = forceOpen !== undefined ? forceOpen : !sortPanel.classList.contains('open');
+    sortPanel.classList.toggle('open', willOpen);
+    sortToggleBtn.setAttribute('aria-expanded', String(willOpen));
+  }
+
+  sortToggleBtn.addEventListener('click', () => toggleSortPanel());
+  collapseSortBtn.addEventListener('click', () => toggleSortPanel(false));
+
+  applySortBtn.addEventListener('click', function () {
+    const selected = Array.from(document.querySelectorAll('.genre-checkbox:checked')).map(cb => cb.value);
+    toggleSortPanel(false);
+    // BACKEND HOOK: fetch('/api/library?userId={{user.id}}&genres=' + selected.join(',')).then(...)
+    showLibrary(selected);
+  });
+
+  document.getElementById('loadMoreBtn').addEventListener('click', function () {
+    // BACKEND HOOK: fetch the next page of library results and append to #libraryGrid
+    console.log('Load more clicked — wire up pagination.');
+  });
+});
+</script>
+</body>
+</html>

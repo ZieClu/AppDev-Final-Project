@@ -195,7 +195,7 @@ a { text-decoration: none; }
   height: 160px;
   right: -30px;
   bottom: -40px;
-  background: radial-gradient(circle, rgba(58, 42, 26, 0.12) 0%, rgba(58, 42, 26, 0) 70%);
+  background: radial-gradient(circle, #3a2a1a1f 0%, #3a2a1a00 70%);
   pointer-events: none;
 }
 
@@ -224,12 +224,6 @@ a { text-decoration: none; }
   color: var(--ink);
   cursor: pointer;
   transition: background 0.15s ease, transform 0.15s ease;
-  opacity: 0;
-  transform: translateY(6px);
-}
-
-.bm-filters-panel.open .bm-genre-check {
-  animation: genreRise 0.32s ease forwards;
 }
 
 .bm-genre-check:hover {
@@ -243,22 +237,6 @@ a { text-decoration: none; }
   accent-color: var(--brown-800);
   cursor: pointer;
 }
-
-@keyframes genreRise {
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* stagger the checkbox rows slightly as the panel opens */
-#genreCheckboxList .col-6:nth-child(1) .bm-genre-check { animation-delay: 0.03s; }
-#genreCheckboxList .col-6:nth-child(2) .bm-genre-check { animation-delay: 0.07s; }
-#genreCheckboxList .col-6:nth-child(3) .bm-genre-check { animation-delay: 0.11s; }
-#genreCheckboxList .col-6:nth-child(4) .bm-genre-check { animation-delay: 0.15s; }
-#genreCheckboxList .col-6:nth-child(5) .bm-genre-check { animation-delay: 0.19s; }
-#genreCheckboxList .col-6:nth-child(6) .bm-genre-check { animation-delay: 0.23s; }
-#genreCheckboxList .col-6:nth-child(7) .bm-genre-check { animation-delay: 0.27s; }
-#genreCheckboxList .col-6:nth-child(8) .bm-genre-check { animation-delay: 0.31s; }
-#genreCheckboxList .col-6:nth-child(9) .bm-genre-check { animation-delay: 0.35s; }
-#genreCheckboxList .col-6:nth-child(10) .bm-genre-check { animation-delay: 0.39s; }
 
 
 .bm-filters-panel-foot {
@@ -294,7 +272,7 @@ a { text-decoration: none; }
 .bm-apply-btn:hover {
   background: #4a3722;
   transform: translateY(-2px);
-  box-shadow: 0 10px 18px -8px rgba(43, 29, 18, 0.5);
+  box-shadow: 0 10px 18px -8px #2b1d1280;
 }
 
 .bm-apply-btn:active { transform: translateY(0); }
@@ -586,4 +564,467 @@ a { text-decoration: none; }
 @media (max-width: 992px) {
   .bm-sidebar { display: none; }
   .bm-filters-panel { width: calc(100vw - 3rem); }
+}
+
+
+/* BOOK INFO PAGE (bookinfo.html) */
+
+.bi-layout {
+  display: flex;
+  align-items: stretch;
+  min-height: calc(100vh - 130px);
+  position: relative;
+  z-index: 1;
+}
+
+/* --Left panel: cover + purchase actions-- */
+
+.bi-cover-panel {
+  width: 340px;
+  flex-shrink: 0;
+  background:
+    radial-gradient(circle at 15% 10%, #ffffff14 0%, #ffffff00 40%),
+    radial-gradient(circle at 90% 95%, #2b1d1233 0%, #2b1d1200 45%),
+    linear-gradient(165deg, #6b5236 0%, var(--brown-700) 55%, #4d3a24 100%);
+  padding: 2.75rem 2.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bi-cover-frame {
+  width: 100%;
+  aspect-ratio: 3 / 4.3;
+  border-radius: var(--radius-md);
+  box-shadow: 0 20px 38px -14px #1a110a99;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.1rem;
+  margin-bottom: 1.75rem;
+  overflow: hidden;
+  position: relative;
+}
+
+/* BACKEND HOOK: replace the cover-N gradient background with a real cover
+   image, e.g. <div class="bi-cover-frame"><img src="{{book.coverUrl}}" ...></div>
+   and drop the title/author overlay below if the artwork already has one. */
+.bi-cover-frame img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bi-cover-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  position: relative;
+  text-shadow: 0 2px 6px #00000066;
+}
+
+.bi-cover-author {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-top: 0.35rem;
+  position: relative;
+}
+
+.bi-price {
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  color: var(--cream-100);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.bi-action-row {
+  display: flex;
+  gap: 0.9rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.bi-buy-btn,
+.bi-wishlist-btn {
+  flex: 1;
+  min-width: 120px;
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1.1rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.bi-buy-btn {
+  background: var(--brown-900);
+  color: var(--cream-100);
+}
+.bi-buy-btn:hover {
+  background: #1c1209;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 20px -10px #00000080;
+}
+
+.bi-wishlist-btn {
+  background: transparent;
+  color: var(--cream-100);
+  border: 2px solid var(--cream-100);
+}
+.bi-wishlist-btn:hover {
+  background: #f4e8d31a;
+  transform: translateY(-2px);
+}
+
+.bi-buy-btn:active,
+.bi-wishlist-btn:active { transform: translateY(0); }
+
+/* --Right panel: details-- */
+
+.bi-content-panel {
+  flex: 1;
+  padding: 3rem 3.5rem 3.5rem;
+  overflow-x: hidden;
+}
+
+.bi-title {
+  font-family: var(--font-display);
+  font-size: 3.4rem;
+  color: var(--brown-900);
+  line-height: 1.05;
+  margin-bottom: 0.75rem;
+}
+
+.bi-author {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--brown-900);
+  margin-bottom: 1.25rem;
+}
+
+.bi-author span {
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+
+.bi-divider {
+  border: none;
+  border-top: 2px solid #2b1d1259;
+  margin-bottom: 1.75rem;
+}
+
+.bi-synopsis-heading {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--teal-900);
+  margin-bottom: 0.85rem;
+}
+
+.bi-synopsis-text {
+  color: var(--ink);
+  font-size: 1.08rem;
+  line-height: 1.6;
+  max-width: 62ch;
+  margin-bottom: 2rem;
+}
+
+.bi-genres-pill {
+  background: var(--sage-300);
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  padding: 0.85rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.bi-genres-pill .label {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--ink);
+}
+
+.bi-genre-tag {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--brown-800);
+}
+
+.bi-review-block {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  flex-wrap: wrap;
+}
+
+.bi-stars {
+  display: flex;
+  gap: 0.4rem;
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--teal-800);
+  margin-bottom: 1.1rem;
+  flex-basis: 100%;
+}
+
+.bi-star {
+  cursor: pointer;
+  transition: transform 0.12s ease;
+}
+.bi-star:hover { transform: scale(1.12); }
+
+/* filled state — toggled via JS by adding .is-filled */
+.bi-star.is-filled::before { content: "\2605"; }
+.bi-star::before { content: "\2606"; }
+
+.bi-reviewer-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--sage-100);
+  border: 3px solid var(--teal-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal-800);
+  flex-shrink: 0;
+}
+
+.bi-review-input {
+  flex: 1;
+  min-width: 200px;
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1.4rem;
+  font-size: 1rem;
+  background: #fff;
+  color: var(--ink);
+}
+.bi-review-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #26564566;
+}
+
+.bi-send-btn {
+  background: none;
+  border: none;
+  color: var(--teal-900);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+.bi-send-btn:hover {
+  transform: translateX(2px) scale(1.08);
+  color: var(--teal-800);
+}
+
+@media (max-width: 900px) {
+  .bi-layout { flex-direction: column; }
+  .bi-cover-panel { width: 100%; }
+  .bi-content-panel { padding: 2rem 1.5rem 2.5rem; }
+  .bi-title { font-size: 2.4rem; }
+}
+
+
+/* ============================================
+   LIBRARY PAGE (library.html)
+   ============================================ */
+
+/* --Secondary nav toolbar: Back / Collections / Wishlist / Purchase History + Sort by-- */
+
+.lib-toolbar {
+  background: var(--brown-700);
+  padding: 0.8rem 1.75rem;
+  display: flex;
+  align-items: stretch;
+  position: relative;
+  z-index: 30;
+}
+
+.lib-nav {
+  display: flex;
+  align-items: center;
+  gap: 2.1rem;
+  flex-wrap: wrap;
+  flex: 1;
+  padding: 0.35rem 0;
+}
+
+.lib-nav a {
+  color: var(--cream-100);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: #f4e8d3a0;
+  transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+
+.lib-nav a .spark {
+  font-size: 0.85rem;
+  text-decoration: none;
+}
+
+.lib-nav a:hover {
+  color: #fff;
+  text-decoration-color: #fff;
+}
+
+.lib-sort-toggle {
+  background: transparent;
+  border: none;
+  border-left: 1.5px solid #f4e8d359;
+  color: var(--cream-100);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem 0.4rem 1.5rem;
+  flex-shrink: 0;
+}
+
+.lib-sort-toggle .caret {
+  font-size: 0.7rem;
+  transition: transform 0.15s ease;
+}
+
+.lib-sort-toggle[aria-expanded="true"] .caret {
+  transform: rotate(180deg);
+}
+
+/* Reuse .bm-filters-panel visuals, just anchor to the right edge */
+.lib-filters-panel {
+  left: auto;
+  right: 1.75rem;
+  transform-origin: top right;
+}
+
+/* --Library heading: avatar + "User's Library" title-- */
+
+.lib-header-row {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  padding: 2.5rem 2.5rem 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.lib-avatar {
+  width: 108px;
+  height: 108px;
+  border-radius: 50%;
+  background: var(--sage-100);
+  border: 5px solid var(--teal-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal-800);
+  flex-shrink: 0;
+  box-shadow: 0 12px 22px -10px #2b1d1266;
+}
+
+.lib-title {
+  font-family: var(--font-display);
+  font-size: 2.75rem;
+  color: var(--teal-900);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  margin: 0;
+}
+
+.lib-title .spark {
+  color: var(--teal-800);
+  font-size: 1.9rem;
+}
+
+/* --Library content + grid-- */
+
+.lib-content {
+  padding: 0 2.5rem 3rem;
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - 320px);
+}
+
+.lib-empty-state {
+  color: var(--brown-900);
+  font-style: italic;
+  padding: 2rem 0;
+}
+
+.lib-book-card {
+  text-align: center;
+}
+
+.lib-cover {
+  aspect-ratio: 3 / 4.3;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 12px 24px -10px #2b1d1280;
+  margin-bottom: 0.9rem;
+  overflow: hidden;
+  position: relative;
+  transform: translateY(0) scale(1);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.28s ease;
+  will-change: transform;
+}
+
+.lib-book-card:hover .lib-cover,
+.lib-book-card:focus-within .lib-cover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 24px 38px -12px rgba(43, 29, 18, 0.5);
+}
+
+.lib-book-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--teal-900);
+  line-height: 1.2;
+}
+
+.lib-book-author {
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  color: var(--ink-soft);
+  margin-top: 0.3rem;
+}
+
+/* teal-tinted scrollbar to match the library page chrome */
+.lib-scroll::-webkit-scrollbar { width: 12px; }
+.lib-scroll::-webkit-scrollbar-track { background: var(--content-bg); }
+.lib-scroll::-webkit-scrollbar-thumb {
+  background: var(--teal-800);
+  border-radius: 999px;
+  border: 2px solid var(--content-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lib-cover { transition: none !important; }
+  .lib-book-card:hover .lib-cover { transform: none; }
+}
+
+@media (max-width: 768px) {
+  .lib-header-row { padding: 2rem 1.5rem 1.5rem; gap: 1.1rem; }
+  .lib-title { font-size: 2rem; }
+  .lib-avatar { width: 80px; height: 80px; }
+  .lib-content { padding: 0 1.5rem 2.5rem; }
+  .lib-nav { gap: 1.2rem; }
+  .lib-filters-panel { width: calc(100vw - 3rem); right: 1.25rem; }
 }
