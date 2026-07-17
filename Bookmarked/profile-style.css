@@ -1,0 +1,234 @@
+.pf-layout {
+  display: flex;
+  align-items: stretch;
+  min-height: calc(100vh - 90px);
+  position: relative;
+  z-index: 1;
+}
+
+/* --Left panel: identity + nav-- */
+
+.pf-profile-panel {
+  width: 60%;
+  max-width: 700px;
+  flex-shrink: 0;
+  background: var(--sage-300);
+  padding: 3.5rem 3rem 3rem;
+}
+
+.pf-avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: var(--sage-100);
+  border: 5px solid var(--teal-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal-800);
+  margin-bottom: 1.1rem;
+}
+
+.pf-username {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  color: var(--teal-800);
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
+}
+
+.pf-username-form {
+  margin: 0 0 0.5rem;
+}
+
+.pf-username-input {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  color: var(--teal-800);
+  line-height: 1.1;
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: 100%;
+}
+
+.pf-username-input:focus {
+  outline: none;
+}
+
+.pf-username-input.editing {
+  background: #fff;
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.75rem;
+  font-size: 1.6rem;
+  box-shadow: 0 0 0 3px #26564566;
+}
+
+.pf-edit-username {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.pf-edit-username .icon {
+  font-size: 1rem;
+}
+
+.pf-edit-username a,
+.pf-change-pic a {
+  color: var(--teal-800);
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pf-edit-username a:hover,
+.pf-change-pic a:hover {
+  color: var(--teal-900);
+}
+
+.pf-change-pic {
+  margin-bottom: 1.75rem;
+}
+
+.pf-divider {
+  border: none;
+  height: 2px;
+  background: var(--teal-800);
+  opacity: 0.55;
+  margin-bottom: 1.9rem;
+}
+
+.pf-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 1.6rem;
+  column-gap: 1rem;
+  margin-bottom: 1.9rem;
+}
+
+.pf-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--teal-800);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pf-nav a:hover {
+  color: var(--teal-900);
+}
+
+.pf-nav .spark {
+  font-size: 1.05rem;
+  flex-shrink: 0;
+}
+
+.pf-footer-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pf-footer-links a {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  color: var(--teal-800);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.pf-footer-links a:hover {
+  color: var(--teal-900);
+}
+
+/* --Right panel: account information form-- */
+
+.pf-info-panel {
+  flex: 1;
+  padding: 2.75rem 4rem 3rem 5.5rem;
+  overflow-x: hidden;
+}
+
+.pf-info-heading {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--teal-900);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.4rem;
+}
+
+.pf-field {
+  margin-bottom: 1rem;
+  max-width: 460px;
+}
+
+.pf-field label {
+  display: block;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.3rem;
+  font-size: 0.85rem;
+}
+
+.pf-field input {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  background: #fff;
+  color: var(--ink);
+}
+
+.pf-field input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px #26564566;
+}
+
+.pf-field-birthdate {
+  position: relative;
+}
+
+.pf-field-birthdate .cal-icon {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(calc(-50% + 0.6rem));
+  color: var(--teal-800);
+  pointer-events: none;
+  font-size: 0.95rem;
+}
+
+.pf-field-password input {
+  letter-spacing: 0.15em;
+}
+
+.pf-change-password {
+  display: inline-block;
+  margin-top: 0.5rem;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 0.95rem;
+}
+
+.pf-change-password:hover {
+  color: var(--brown-900);
+}
+
+@media (max-width: 900px) {
+  .pf-layout { flex-direction: column; }
+  .pf-profile-panel { width: 100%; max-width: none; }
+  .pf-nav { grid-template-columns: 1fr; }
+  .pf-info-panel { padding: 2.25rem 1.75rem 2.5rem; }
+}
