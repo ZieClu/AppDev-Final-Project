@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 17, 2026 at 11:37 AM
+-- Generation Time: Jul 18, 2026 at 03:23 PM
 -- Server version: 8.0.44
 -- PHP Version: 8.2.12
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `books` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`book_id`),
   KEY `seller_id` (`seller_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `books`
@@ -55,7 +55,8 @@ INSERT INTO `books` (`book_id`, `seller_id`, `title`, `author`, `synopsis`, `pri
 (8, 4, 'The Great Gatsby', 'F. Scott Fitzgerald', 'James L. W. West III to include the author’s final revisions and features a note on the composition and text, a personal foreword by Fitzgerald’s granddaughter, Eleanor Lanahan—and a new introduction by two-time National Book Award winner Jesmyn Ward.\r\n\r\nThe Great Gatsby, F. Scott Fitzgerald’s third book, stands as the supreme achievement of his career. First published in 1925, this quintessential novel of the Jazz Age has been acclaimed by generations of readers. The story of the mysteriously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan, of lavish parties on Long Island at a time when The New York Times noted “gin was the national drink and sex the national obsession,” it is an exquisitely crafted tale of America in the 1920s.', 200.00, 'bookcoversLoader/8.jpg', 'available', '2026-07-16 14:27:02'),
 (9, 4, 'To Kill a Mockingbird', 'Harper Lee', 'One of the best-loved stories of all time, To Kill a Mockingbird has been translated into more than forty languages, sold more than forty million copies worldwide, served as the basis for an enormously popular motion picture, and was voted one of the best novels of the twentieth century by librarians across the country. A gripping, heart-wrenching, and wholly remarkable coming-of-age tale in a South poisoned by virulent prejudice, it views a world of great beauty and savage iniquities through the eyes of a young girl, as her father — a crusading local lawyer — risks everything to defend a black man unjustly accused of a terrible crime.', 500.00, 'bookcoversLoader/9.jpg', 'available', '2026-07-16 14:29:53'),
 (12, 9, 'The Island of Missing Trees', 'Elif Shafak', 'A rich, magical new book on belonging and identity, love and trauma, nature and renewal, from the Booker shortlisted author of 10 Minutes 38 Seconds in This Strange World.\r\n\r\nTwo teenagers, a Greek Cypriot and a Turkish Cypriot, meet at a taverna on the island they both call home. In the taverna, hidden beneath garlands of garlic, chili peppers and creeping honeysuckle, Kostas and Defne grow in their forbidden love for each other. A fig tree stretches through a cavity in the roof, and this tree bears witness to their hushed, happy meetings and eventually, to their silent, surreptitious departures. The tree is there when war breaks out, when the capital is reduced to ashes and rubble, and when the teenagers vanish. Decades later, Kostas returns. He is a botanist looking for native species, but really, he’s searching for lost love.\r\n\r\nYears later a Ficus carica grows in the back garden of a house in London where Ada Kazantzakis lives. This tree is her only connection to an island she has never visited -- her only connection to her family’s troubled history and her complex identity as she seeks to untangle years of secrets to find her place in the world.\r\n\r\nA moving, beautifully written and delicately constructed story of love, division, transcendence, history and eco-consciousness, The Island of Missing Trees is Elif Shafak’s best work yet.', 600.00, 'bookcoversLoader/12.jpg', 'available', '2026-07-17 08:56:21'),
-(14, 10, 'Dracula', 'Bram Stoker', 'When Jonathan Harker visits Transylvania to help Count Dracula with the purchase of a London house, he makes a series of horrific discoveries about his client. Soon afterwards, various bizarre incidents unfold in England: an apparently unmanned ship is wrecked off the coast of Whitby; a young woman discovers strange puncture marks on her neck; and the inmate of a lunatic asylum raves about the \'Master\' and his imminent arrival.\r\n\r\nIn Dracula, Bram Stoker created one of the great masterpieces of the horror genre, brilliantly evoking a nightmare world of vampires and vampire hunters and also illuminating the dark corners of Victorian sexuality and desire.\r\n\r\nThis Norton Critical Edition includes a rich selection of background and source materials in three areas: Contexts includes probable inspirations for Dracula in the earlier works of James Malcolm Rymer and Emily Gerard. Also included are a discussion of Stoker\'s working notes for the novel and \"Dracula\'s Guest,\" the original opening chapter to Dracula. Reviews and Reactions reprints five early reviews of the novel. \"Dramatic and Film Variations\" focuses on theater and film adaptations of Dracula, two indications of the novel\'s unwavering appeal. David J. Skal, Gregory A. Waller, and Nina Auerbach offer their varied perspectives. Checklists of both dramatic and film adaptations are included.\r\n\r\nCriticism collects seven theoretical interpretations of Dracula by Phyllis A. Roth, Carol A. Senf, Franco Moretti, Christopher Craft, Bram Dijkstra, Stephen D. Arata, and Talia Schaffer.\r\n\r\nA Chronology and a Selected Bibliography are included.', 400.00, 'bookcoversLoader/14.jpg', 'available', '2026-07-17 09:23:35');
+(14, 10, 'Dracula', 'Bram Stoker', 'When Jonathan Harker visits Transylvania to help Count Dracula with the purchase of a London house, he makes a series of horrific discoveries about his client. Soon afterwards, various bizarre incidents unfold in England: an apparently unmanned ship is wrecked off the coast of Whitby; a young woman discovers strange puncture marks on her neck; and the inmate of a lunatic asylum raves about the \'Master\' and his imminent arrival.\r\n\r\nIn Dracula, Bram Stoker created one of the great masterpieces of the horror genre, brilliantly evoking a nightmare world of vampires and vampire hunters and also illuminating the dark corners of Victorian sexuality and desire.\r\n\r\nThis Norton Critical Edition includes a rich selection of background and source materials in three areas: Contexts includes probable inspirations for Dracula in the earlier works of James Malcolm Rymer and Emily Gerard. Also included are a discussion of Stoker\'s working notes for the novel and \"Dracula\'s Guest,\" the original opening chapter to Dracula. Reviews and Reactions reprints five early reviews of the novel. \"Dramatic and Film Variations\" focuses on theater and film adaptations of Dracula, two indications of the novel\'s unwavering appeal. David J. Skal, Gregory A. Waller, and Nina Auerbach offer their varied perspectives. Checklists of both dramatic and film adaptations are included.\r\n\r\nCriticism collects seven theoretical interpretations of Dracula by Phyllis A. Roth, Carol A. Senf, Franco Moretti, Christopher Craft, Bram Dijkstra, Stephen D. Arata, and Talia Schaffer.\r\n\r\nA Chronology and a Selected Bibliography are included.', 400.00, 'bookcoversLoader/14.jpg', 'available', '2026-07-17 09:23:35'),
+(16, 11, 'The Talented Mr. Ripley', 'Patricia Highsmith', 'It’s here, in the first volume of Patricia Highsmith’s five-book Ripley series, that we are introduced to the suave Tom Ripley, a young striver seeking to leave behind his past as an orphan bullied for being a “sissy.” Newly arrived in the heady world of Manhattan, Ripley meets a wealthy industrialist who hires him to bring his playboy son, Dickie Greenleaf, back from gallivanting in Italy. Soon Ripley’s fascination with Dickie’s debonair lifestyle turns obsessive as he finds himself enraged by Dickie’s ambivalent affections for Marge, a charming American dilettante, and Ripley begins a deadly game.\r\n\r\n“Sinister and strangely alluring,” (Mark Harris, Entertainment Weekly) The Talented Mr. Ripley serves as an unforgettable introduction to this smooth confidence man, whose talent for self-invention is as unnerving—and unnervingly revealing of the American psyche—as ever.', 600.00, 'bookcoversLoader/16.jpg', 'available', '2026-07-17 11:17:38');
 
 -- --------------------------------------------------------
 
@@ -85,8 +86,10 @@ INSERT INTO `book_genres` (`book_id`, `genre_id`) VALUES
 (8, 2),
 (9, 2),
 (12, 2),
+(16, 2),
 (4, 3),
 (6, 3),
+(16, 3),
 (2, 4),
 (7, 4),
 (8, 4),
@@ -96,6 +99,7 @@ INSERT INTO `book_genres` (`book_id`, `genre_id`) VALUES
 (3, 5),
 (3, 6),
 (6, 6),
+(16, 6),
 (3, 7),
 (12, 7),
 (4, 8),
@@ -124,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `collections` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`collection_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `collections`
@@ -135,7 +139,9 @@ INSERT INTO `collections` (`collection_id`, `user_id`, `collection_name`, `creat
 (2, 2, 'Collection 2', '2026-07-16 14:07:47'),
 (4, 1, 'Collection 1', '2026-07-16 15:24:43'),
 (9, 9, 'Science Fiction Books', '2026-07-17 08:59:49'),
-(11, 10, 'Collection 1', '2026-07-17 09:19:26');
+(11, 10, 'Collection 1', '2026-07-17 09:19:26'),
+(12, 11, 'Books I Like', '2026-07-17 11:04:30'),
+(15, 11, 'New Collection', '2026-07-17 11:15:13');
 
 -- --------------------------------------------------------
 
@@ -157,8 +163,11 @@ CREATE TABLE IF NOT EXISTS `collection_books` (
 
 INSERT INTO `collection_books` (`collection_id`, `book_id`) VALUES
 (11, 4),
+(12, 6),
 (9, 7),
-(11, 12);
+(15, 8),
+(11, 12),
+(12, 14);
 
 -- --------------------------------------------------------
 
@@ -218,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `purchases` (
   KEY `book_id` (`book_id`),
   KEY `buyer_id` (`buyer_id`),
   KEY `seller_id` (`seller_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `purchases`
@@ -234,7 +243,11 @@ INSERT INTO `purchases` (`purchase_id`, `book_id`, `buyer_id`, `seller_id`, `boo
 (10, 12, 10, 9, 'The Island of Missing Trees', 'Elif Shafak', 'bookcoversLoader/12.jpg', 600.00, '2026-07-17 09:14:52'),
 (11, 6, 10, 3, 'Heather', 'Caitlin Mullen', 'bookcoversLoader/6.jpg', 600.00, '2026-07-17 09:15:56'),
 (12, 4, 10, 2, 'Project Hail Mary', 'Andy Weir', 'bookcoversLoader/4.jpg', 700.00, '2026-07-17 09:16:05'),
-(13, 14, 9, 10, 'Dracula', 'Bram Stoker', 'bookcoversLoader/14.jpg', 400.00, '2026-07-17 09:25:25');
+(13, 14, 9, 10, 'Dracula', 'Bram Stoker', 'bookcoversLoader/14.jpg', 400.00, '2026-07-17 09:25:25'),
+(14, 14, 11, 10, 'Dracula', 'Bram Stoker', 'bookcoversLoader/14.jpg', 400.00, '2026-07-17 10:51:34'),
+(15, 8, 11, 4, 'The Great Gatsby', 'F. Scott Fitzgerald', 'bookcoversLoader/8.jpg', 200.00, '2026-07-17 10:51:47'),
+(16, 6, 11, 3, 'Heather', 'Caitlin Mullen', 'bookcoversLoader/6.jpg', 600.00, '2026-07-17 10:51:54'),
+(17, 16, 9, 11, 'The Talented Mr. Ripley', 'Patricia Highsmith', 'bookcoversLoader/16.jpg', 600.00, '2026-07-17 11:18:38');
 
 -- --------------------------------------------------------
 
@@ -278,7 +291,8 @@ CREATE TABLE IF NOT EXISTS `reviews` (
 INSERT INTO `reviews` (`review_id`, `purchase_id`, `book_id`, `rating`, `review_text`, `created_at`) VALUES
 (2, 2, 7, 4, 'Goated Book', '2026-07-16 14:43:49'),
 (6, 7, 9, 4, 'I like it', '2026-07-17 08:57:41'),
-(8, 10, 12, 4, 'I like it', '2026-07-17 09:15:37');
+(8, 10, 12, 4, 'I like it', '2026-07-17 09:15:37'),
+(10, 16, 6, 4, 'I like this book', '2026-07-17 10:53:55');
 
 -- --------------------------------------------------------
 
@@ -300,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
@@ -313,7 +327,8 @@ INSERT INTO `users` (`user_id`, `username`, `first_name`, `last_name`, `email`, 
 (4, 'user04', 'Jane', 'Doe', 'jd@gmail.com', '$2y$10$wZMKEsnFJJARxZRX2cOtTed895XLULqwPNoRopYK9XvIm/KJ.I33m', '2022-02-14', 'profilepictures/default.png', '2026-07-16 14:25:03'),
 (5, 'user05', 'John', 'Doe', 'user05@gmail.com', '$2y$10$prmXShqsOnXiZDCGRK9oVu6knzbesWlf7dW5Yt4OBqDaAcrdcwQ9a', '2022-02-17', 'profilepictures/default.png', '2026-07-17 05:16:35'),
 (9, 'LMSophie10', 'Leinna Sophia', 'Malay', 'leinnasophia@gmail.com', '$2y$10$JclGZS6NqPPUta.kALuK4eAeVw2s0uufA.b/mRDpGrY/Ib.kGL8Uq', '2006-01-10', 'profilepictures/9FURINA_BGPHOTO2.jpg', '2026-07-17 08:51:47'),
-(10, 'MaryLamb05', 'Mary', 'Jones', 'mj1234@gmail.com', '$2y$10$YE8eZeX3faHP/P2CzcWjluA74bG7ePtgod.cXTP.h4xNm4kRK6J7C', '2007-02-13', 'profilepictures/10FURINA_BGPHOTO2.jpg', '2026-07-17 09:12:25');
+(10, 'MaryLamb05', 'Mary', 'Jones', 'mj1234@gmail.com', '$2y$10$YE8eZeX3faHP/P2CzcWjluA74bG7ePtgod.cXTP.h4xNm4kRK6J7C', '2007-02-13', 'profilepictures/10FURINA_BGPHOTO2.jpg', '2026-07-17 09:12:25'),
+(11, 'JD567', 'James', 'Smith', 'jd567@gmail.com', '$2y$10$iIckNe.3zIY4np9w24lyeuVuI0jNbINZrR5/X/JDXjvnAiwBQaMpy', '2006-01-06', 'profilepictures/11default.png', '2026-07-17 10:28:02');
 
 -- --------------------------------------------------------
 
@@ -338,7 +353,9 @@ INSERT INTO `wishlist` (`user_id`, `book_id`, `added_at`) VALUES
 (1, 3, '2026-07-16 15:26:43'),
 (9, 2, '2026-07-17 08:59:02'),
 (9, 3, '2026-07-17 08:58:56'),
-(10, 2, '2026-07-17 09:17:49');
+(10, 2, '2026-07-17 09:17:49'),
+(11, 2, '2026-07-17 11:02:46'),
+(11, 3, '2026-07-17 11:01:38');
 
 --
 -- Constraints for dumped tables
