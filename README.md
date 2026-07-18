@@ -5,7 +5,9 @@ The other folders are for storing the separate codes for backend logic and the f
 
 ---
 
-Additional Notes: In connection.php, change the root password to mysql to the one set in your device.
+Additional Notes: 
+- In connection.php, change the root password to mysql to the one set in your device.
+- Use the bookmarked.sql file to load the database
 
 ---
 
